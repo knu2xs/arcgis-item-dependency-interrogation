@@ -98,3 +98,14 @@ docs/
 
 # exclude cookiecutter post_gen log file
 post_gen_project.log
+
+# additional local env and editor/temp artifacts
+.venv/
+venv/
+.env*
+Thumbs.db
+*.tmp
+*.swp
+
+# exclude any report outputs
+reports/
