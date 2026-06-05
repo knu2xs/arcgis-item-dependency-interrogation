@@ -5,9 +5,9 @@ site_dir: ../docs
 
 nav:
   - Home: index.md
-  - Configuration: configuration.md
+  - Quickstart: quickstart.md
   - API: api.md
-  - Cookiecutter Reference: cookiecutter_reference.md
+  - Example Dependency Investigation: storymap_dependency_investigation.ipynb
 
 
 # add a GitHub repo link to the top navigation bar
