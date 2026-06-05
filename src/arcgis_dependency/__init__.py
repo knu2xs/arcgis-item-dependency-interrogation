@@ -9,6 +9,11 @@ __copyright__ = "Copyright 2026 by Joel McCune (https://github.com/knu2xs)"
 # add specific imports below if you want to organize your code into modules, which is mostly what I do
 from . import config as config
 from . import utils
-from ._main import interrogate_item_dependencies
+from ._main import interrogate_item_dependencies, interrogate_parent_dependency_impact
 
-__all__ = ["config", "interrogate_item_dependencies", "utils"]
+__all__ = [
+	"config",
+	"interrogate_item_dependencies",
+	"interrogate_parent_dependency_impact",
+	"utils",
+]

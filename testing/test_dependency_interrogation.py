@@ -5,10 +5,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 from types import SimpleNamespace
-import zipfile
-from xml.etree import ElementTree as ET
 
 import pandas as pd
+from openpyxl import load_workbook
 
 from arcgis_dependency import interrogate_item_dependencies
 import arcgis_dependency._main as dependency_main
@@ -54,6 +53,25 @@ class FakeGIS:
 
 def _patch_gis(monkeypatch, items: dict[str, FakeItem | None]) -> None:
     monkeypatch.setattr(dependency_main, "_build_gis", lambda: FakeGIS(items))
+
+
+def test_interrogate_item_dependencies_uses_provided_gis_instance(monkeypatch) -> None:
+    """A supplied GIS instance should bypass config-based GIS construction."""
+    child = FakeItem("child", "Child Item")
+    root = FakeItem("root", "Root Item", dependencies=[child])
+    provided_gis = FakeGIS({"root": root, "child": child})
+    monkeypatch.setattr(
+        dependency_main,
+        "_build_gis",
+        lambda: (_ for _ in ()).throw(AssertionError("_build_gis should not be called")),
+    )
+    monkeypatch.setattr(dependency_main.config, "get", lambda key, default=None: default)
+
+    result = interrogate_item_dependencies(item_ids="root", gis=provided_gis)
+
+    assert isinstance(result, pd.DataFrame)
+    assert result["parent_item_id"].tolist() == ["root"]
+    assert result["dependent_item_id"].tolist() == ["child"]
 
 
 def test_interrogate_item_dependencies_returns_recursive_dataframe(monkeypatch) -> None:
@@ -149,10 +167,7 @@ def test_interrogate_item_dependencies_writes_workbook_and_returns_path(monkeypa
     assert isinstance(result, Path)
     assert result == output_path
     assert result.exists()
-    assert zipfile.is_zipfile(result)
-    with zipfile.ZipFile(result) as archive:
-        sheet_xml = archive.read("xl/worksheets/sheet1.xml")
-    sheet = ET.fromstring(sheet_xml)
-    namespace = {"main": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
-    values = [node.text for node in sheet.findall(".//main:t", namespace)]
+    workbook = load_workbook(result)
+    sheet = workbook["Dependencies"]
+    values = [value for row in sheet.iter_rows(values_only=True) for value in row if value is not None]
     assert "child" in values
