@@ -1,4 +1,4 @@
-from argis.gis import GIS
+from arcgis.gis import GIS
 
 from ..config import Config
 
