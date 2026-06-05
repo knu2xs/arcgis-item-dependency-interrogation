@@ -1,9 +1,9 @@
 """
-Logging utilities including an ArcPy logging handler and logger configuration function.
+Logging utilities including a logger configuration function.
 
 As a best practice, it is recommended to set up logging for your application using the
-`get_logger` function. This ensures logging is properly routed to the console, logfile
-and ArcPy messaging as appropriate. For example, in each module of your application, you 
+`get_logger` function. This ensures logging is properly routed to the console and logfile
+as appropriate. For example, in each module of your application, you 
 should set up a logger like this:
 
 ``` python
@@ -59,70 +59,6 @@ from typing import Union, Optional
 __all__ = ["get_logger", "format_df_for_logging", "ArcpyHandler"]
 
 
-class ArcpyHandler(logging.Handler):
-    """
-    Logging message handler capable of routing logging through ArcPy AddMessage, AddWarning and AddError methods.
-    DEBUG and INFO logging messages are be handled by the AddMessage method. WARNING logging messages are handled
-    by the AddWarning method. ERROR and CRITICAL logging messages are handled by the AddError method.
-    Basic use consists of the following.
-    
-    ``` python
-    logger = logging.getLogger('arcpy-logger')
-    logger.setLevel('INFO')
-    
-    ah = ArcpyHandler()
-    logger.addHandler(ah)
-
-    logger.debug('nauseatingly detailed debugging message')
-    logger.info('something actually useful to know')
-    logger.warning('The sky may be falling - notifiying of potential issues')
-    logger.error('The sky is falling - notifying of a failure in a specific operation')
-    logger.critical('The sky appears to be falling because a giant meteor is colliding with the earth - severe failure that may stop the program')
-    ```
-    """
-
-    # since everything goes through ArcPy methods, we do not need a message line terminator
-    terminator = ""
-
-    def __init__(self, level: Union[int, str] = 10):
-        # throw logical error if arcpy not available
-        if find_spec("arcpy") is None:
-            raise EnvironmentError(
-                "The ArcPy handler requires an environment with ArcPy, a Python environment with "
-                "ArcGIS Pro or ArcGIS Enterprise."
-            )
-
-        # call the parent to cover rest of any potential setup
-        super().__init__(level=level)
-
-    def emit(self, record: logging.LogRecord) -> None:
-        """
-        Args:
-            record: Record containing all information needed to emit a new logging event.
-        
-        !!! note
-            This method should not be called directly, but rather enables the `Logger` methods to
-            be able to use this handler correctly.
-        """
-        # run through the formatter to honor logging formatter settings
-        msg = self.format(record)
-
-        # late import to avoid issues in non-ArcPy environments
-        import arcpy
-
-        # route anything NOTSET (0), DEBUG (10) or INFO (20) through AddMessage
-        if record.levelno <= 20:
-            arcpy.AddMessage(msg)
-
-        # route all WARN (30) messages through AddWarning
-        elif record.levelno == 30:
-            arcpy.AddWarning(msg)
-
-        # everything else; ERROR (40), FATAL (50) and CRITICAL (50), route through AddError
-        else:
-            arcpy.AddError(msg)
-
-
 # setup logging
 def get_logger(
     logger_name: Optional[str] = None,
@@ -131,7 +67,6 @@ def get_logger(
     log_format: Optional[str] = "%(asctime)s | %(name)s | %(levelname)s | %(message)s",
     propagate: bool = True,
     add_stream_handler: bool = False,
-    add_arcpy_handler: bool = False,
 ) -> logging.Logger:
     """
     Get Python `logging.Logger` configured to provide stream, file or, if available, ArcPy output.
@@ -160,8 +95,6 @@ def get_logger(
         propagate: If `True`, log messages are passed to the handlers of ancestor loggers. Default is `False`.
         logfile_path: Where to save the logfile if file output is desired.
         add_stream_handler: If `True`, add a `StreamHandler` to route logging to the console. Default is `False`.
-        add_arcpy_handler: If `True` and ArcPy is available, add the `ArcpyHandler` to route logging through
-            ArcPy messaging. Default is `False`.
 
     ``` python
     logger = get_logger('DEBUG')
@@ -216,13 +149,6 @@ def get_logger(
         
         # set the formatter for the stream handler
         stream_handler.setFormatter(log_frmt)
-
-
-    # if in an environment with ArcPy, and desired, add handler to bubble logging up to ArcGIS through ArcPy
-    if find_spec("arcpy") is not None and add_arcpy_handler:
-        ah = ArcpyHandler()
-        ah.setFormatter(log_frmt)
-        logger.addHandler(ah)
 
     # if a path for the logfile is provided, log results to the file
     if logfile_path is not None:

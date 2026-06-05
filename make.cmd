@@ -29,17 +29,6 @@ SET PROJECT_NAME=arcgis-item-dependency-interrogation
 SET SUPPORT_LIBRARY = arcgis_dependency
 SET CONDA_DIR="%~dp0env"
 
-:: Get ArcGIS Pro installation path from registry
-FOR /F "tokens=2*" %%A IN ('REG QUERY "HKEY_LOCAL_MACHINE\SOFTWARE\ESRI\ArcGISPro" /v InstallDir 2^>nul') DO SET ARCGIS_PRO_DIR=%%B
-
-:: If registry query fails, fall back to default location
-IF NOT DEFINED ARCGIS_PRO_DIR (
-    SET ARCGIS_PRO_DIR="C:\Program Files\ArcGIS\Pro"
-)
-
-:: Set the ArcGIS Pro Python environment path
-SET ARCGIS_PRO_PYTHON="%ARCGIS_PRO_DIR%\bin\Python\envs\arcgispro-py3"
-
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: COMMANDS                                                                     :
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -71,14 +60,8 @@ GOTO %1
 :: Build the local environment from the environment file
 :env
     :: Create new environment from environment file
-    CALL conda create -p %CONDA_DIR% --clone %ARCGIS_PRO_PYTHON% -y
-    GOTO add_dependencies
-
-:: Add python dependencies from environment.yml to the project environment
-:add_dependencies
-        
-    :: Add more fun stuff from environment file
-    CALL conda env update -p %CONDA_DIR% -f environment.yml
+    CALL conda env create -p %CONDA_DIR% -f environment.yml -y
+    IF ERRORLEVEL 1 GOTO end
 
     :: Install the local package in development (experimental) mode
     CALL conda run -p %CONDA_DIR% python -m pip install -e .
@@ -93,19 +76,6 @@ GOTO %1
 :: Start Jupyter Label
 :jupyter
     CALL conda run -p %CONDA_DIR% python -m jupyterlab --ip=0.0.0.0 --allow-root --NotebookApp.token=""
-    GOTO end
-
-:: Make *.pyt zipped archive with requirements
-:pytzip
-    CALL conda run -p %CONDA_DIR% python -m scripts/make_pyt_archive.py
-    GOTO end
-
-:: Make the package for uploading
-:wheel
-
-    :: Build the pip package
-    CALL conda run -p %CONDA_DIR% python -m build --wheel
-
     GOTO end
 
 :: Run all tests in module

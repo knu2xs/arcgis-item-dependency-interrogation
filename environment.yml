@@ -1,24 +1,21 @@
 name: arcgis_dependency
 
 channels:
-  - esri
   - conda-forge
+  - esri
+  - defaults
 
 dependencies:
   - appnope
   - arcgis
-  - arcgis-mapping
   - black>=21
-  - h3-py
   - jupyterlab
   - jupyterlab_code_formatter
   - nodejs
   - pip
   - pytest
-  - pyarrow
+  - python>=3.12
   - pyyaml
-  - scipy
-  - scikit-learn
   - tqdm
   - pip:
     - bump2version
