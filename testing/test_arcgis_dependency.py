@@ -1,20 +1,8 @@
-"""
-This is a stubbed out test file designed to be used with PyTest, but can 
-easily be modified to support any testing framework.
-"""
+"""Package-level smoke tests for :mod:`arcgis_dependency`."""
 
-from pathlib import Path
-import sys
+from arcgis_dependency import interrogate_item_dependencies
 
-# get paths to useful resources - notably where the src directory is
-self_pth = Path(__file__)
-dir_test = self_pth.parent
-dir_prj = dir_test.parent
-dir_src = dir_prj / 'src'
 
-# insert the src directory into the path and import the projct package
-sys.path.insert(0, str(dir_src))
-import arcgis_dependency
-
-def test_example():
-    assert 2 + 2 == 4
+def test_package_exports_dependency_interrogation_function() -> None:
+    """Package root should export the dependency interrogation function."""
+    assert callable(interrogate_item_dependencies)

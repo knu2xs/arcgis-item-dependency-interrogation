@@ -42,6 +42,8 @@ environments:
       output: "data/processed"
       log_dir: "data/logs"
 
+    item_ids: []
+
     esri:
       gis_url: "https://cklohsstage.esri.com/portal/"
       gis_profile: "cklohsstage"
