@@ -1,4 +1,4 @@
-site_name: ArcGIS Item Dependency Interrogation 0.0.0
+site_name: ArcGIS Item Dependency Interrogation 0.1.0.dev0
 
 docs_dir: mkdocs
 site_dir: ../docs
