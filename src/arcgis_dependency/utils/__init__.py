@@ -1,8 +1,9 @@
+from ._gis import configure_gis_profile
 from ._logging import get_logger, format_df_for_logging
-from ._data import with_temp_fgdb
+
 
 __all__ = [
+    "configure_gis_profile",
     "get_logger",
     "format_df_for_logging",
-    "with_temp_fgdb",
 ]

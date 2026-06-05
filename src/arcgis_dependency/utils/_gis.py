@@ -3,19 +3,24 @@ from arcgis.gis import GIS
 from ..config import Config
 
 
-def configure_profile(gis_url: str, config: Config, gis_profile: str, gis_username: str, gis_password: str) -> GIS:
+def configure_gis_profile(gis_url: str, config: Config, gis_profile: str, gis_username: str, gis_password: str) -> GIS:
     """
-    Configures a named profile on the local machine using the provided credentials, and returns a GIS object authenticated with that profile.
+    Configure a local ArcGIS profile and return an authenticated GIS object.
 
-    Parameters:
-    - gis_url (str): The URL of the ArcGIS portal.
-    - config (Config): The configuration object containing environment-specific settings.
-    - gis_profile (str): The name of the profile to use.
-    - gis_username (str): The username for the ArcGIS portal.
-    - gis_password (str): The password for the ArcGIS portal.
+    Args:
+        gis_url: URL of the ArcGIS portal.
+        config: Configuration object containing optional environment-specific settings.
+        gis_profile: Name of the ArcGIS profile to use.
+        gis_username: ArcGIS username.
+        gis_password: ArcGIS password.
 
     Returns:
-    - GIS: An instance of the GIS class configured with the specified profile.
+        GIS: GIS instance authenticated with the configured profile.
+
+    Raises:
+        ValueError: If config is not a Config instance.
+        ValueError: If required values are missing after resolving inputs.
+        ValueError: If any resolved parameter is not a string.
     """
     # require either config with gis_url, gis_profile, gis_username, and gis_password, or all 4 parameters passed directly to the function
     if config is not None:
