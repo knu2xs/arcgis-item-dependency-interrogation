@@ -8,7 +8,7 @@
 
 Add a package-level function in `arcgis_dependency` (implemented in `_main.py`, exposed in
 `__init__.py`) that interrogates ArcGIS Online and ArcGIS Enterprise item dependencies using
-item IDs provided directly (single string or list) or from config (`item_ids`).
+item IDs provided directly (single string or list) or from config (`request_item_ids`).
 
 The feature returns a dependency `pandas.DataFrame` by default with required columns
 `parent_item_id`, `parent_item_name`, `dependent_item_id`, and `dependent_item_name`.

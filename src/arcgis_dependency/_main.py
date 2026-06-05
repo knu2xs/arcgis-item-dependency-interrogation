@@ -54,7 +54,7 @@ def interrogate_item_dependencies(
 	resolved_item_ids = _resolve_requested_item_ids(item_ids)
 	if not resolved_item_ids:
 		msg = (
-			"No item IDs were provided and no config item_ids value was available."
+			"No item IDs were provided and no config request_item_ids value was available."
 		)
 		logger.error(msg)
 		raise ValueError(msg)
@@ -155,7 +155,10 @@ def _resolve_requested_item_ids(item_ids: str | list[str] | None) -> list[str]:
 	"""Resolve item IDs from a direct argument or configuration fallback."""
 	if item_ids is None:
 		getter = getattr(config, "get", None)
-		item_ids = getter("item_ids", None) if callable(getter) else None
+		if callable(getter):
+			item_ids = getter("request_item_ids", None)
+			if item_ids is None:
+				item_ids = getter("item_ids", None)
 
 	return _unique_non_empty_strings(item_ids)
 

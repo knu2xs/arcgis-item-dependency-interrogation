@@ -76,12 +76,20 @@ def test_interrogate_item_dependencies_returns_recursive_dataframe(monkeypatch) 
     assert set(result["dependent_item_id"].tolist()) == {"child", "grandchild"}
 
 
-def test_interrogate_item_dependencies_uses_config_item_ids(monkeypatch) -> None:
-    """When no item IDs are supplied, config item_ids should be used."""
+def test_interrogate_item_dependencies_uses_config_request_item_ids(monkeypatch) -> None:
+    """When no item IDs are supplied, config request_item_ids should be used."""
     child = FakeItem("child", "Child Item")
     root = FakeItem("root", "Root Item", dependencies=[child])
     _patch_gis(monkeypatch, {"root": root, "child": child})
-    monkeypatch.setattr(dependency_main, "config", SimpleNamespace(get=lambda key, default=None: ["root"] if key == "item_ids" else default))
+    monkeypatch.setattr(
+        dependency_main,
+        "config",
+        SimpleNamespace(
+            get=lambda key, default=None: ["root"]
+            if key == "request_item_ids"
+            else default
+        ),
+    )
 
     result = interrogate_item_dependencies()
 

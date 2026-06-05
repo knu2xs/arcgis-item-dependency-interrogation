@@ -1,7 +1,7 @@
 # Research: ArcGIS Web GIS Item Dependency Interrogation
 
 ## Decision 1: Input Resolution Priority
-- Decision: Resolve item IDs in this order: explicit function parameter, then config `item_ids`.
+- Decision: Resolve item IDs in this order: explicit function parameter, then config `request_item_ids`.
 - Rationale: Keeps call-site overrides deterministic while supporting config-driven batch runs.
 - Alternatives considered:
 - Config-first resolution

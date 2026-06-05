@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Input**: User description: "Using the ArcGIS Python API's functionality, I want a function in arcgis_dependency (lives in _main and exposed through __init__) to interrogate an ArcGIS Web GIS (ArcGIS Online and ArcGIS Enterprise) site to determine dependencies for a provided item (using item id) or multiple items. The items are provided as a parameter (single string item id or list of item ids) or read from the config (`item_ids`). The default returned result should be a pandas data frame with parent_item_id, parent_item_name,dependent_item_id and dependent_item_name columns. Another optional parameter should enable a path to an output excel workbook, which, if populated will be written, and the return object will the a pathlib.Path to the excel workbook."
+**Input**: User description: "Using the ArcGIS Python API's functionality, I want a function in arcgis_dependency (lives in _main and exposed through __init__) to interrogate an ArcGIS Web GIS (ArcGIS Online and ArcGIS Enterprise) site to determine dependencies for a provided item (using item id) or multiple items. The items are provided as a parameter (single string item id or list of item ids) or read from the config (`request_item_ids`). The default returned result should be a pandas data frame with parent_item_id, parent_item_name,dependent_item_id and dependent_item_name columns. Another optional parameter should enable a path to an output excel workbook, which, if populated will be written, and the return object will the a pathlib.Path to the excel workbook."
 
 ## Clarifications
 
@@ -129,7 +129,7 @@ A developer optionally requests workbook export and receives a created spreadshe
 ## Assumptions
 
 - Callers are already authenticated to the target Web GIS site through existing project configuration and profile setup.
-- Configuration key `item_ids` is available for workflows that omit explicit item parameters.
+- Configuration key `request_item_ids` is available for workflows that omit explicit item parameters.
 - Workbook export uses a standard spreadsheet format accepted by business users.
 - Dependency interrogation scope is limited to relationships discoverable through the ArcGIS Python API for the authenticated user.
 - Initial feature scope focuses on dependency extraction and optional export, not on visualization or graph analytics.

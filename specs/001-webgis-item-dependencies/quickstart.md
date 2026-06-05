@@ -8,7 +8,7 @@
 ## Setup
 1. Activate environment.
 2. Confirm dependencies import in Python.
-3. Ensure config includes fallback `item_ids` for config-driven scenario testing.
+3. Ensure config includes fallback `request_item_ids` for config-driven scenario testing.
 
 ## Validation Scenario 1: Single Item, Default Return
 1. Call `interrogate_item_dependencies(item_ids="<valid_id>")`.
@@ -47,7 +47,7 @@ Expected outcome:
 
 ## Validation Scenario 4: Config-Driven IDs
 1. Omit `item_ids` parameter.
-2. Ensure config `item_ids` is populated.
+2. Ensure config `request_item_ids` is populated.
 3. Execute function.
 
 Expected outcome:

@@ -18,7 +18,7 @@ interrogate_item_dependencies(
 ## Inputs
 - `item_ids`:
 - Optional single item ID string or list of item ID strings.
-- If omitted, implementation resolves IDs from config key `item_ids`.
+- If omitted, implementation resolves IDs from config key `request_item_ids`.
 
 - `output_excel`:
 - Optional workbook output path.
