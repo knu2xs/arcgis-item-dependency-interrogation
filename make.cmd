@@ -61,11 +61,9 @@ GOTO %1
 :env
     :: Create new environment from environment file
     CALL conda env create -p %CONDA_DIR% -f environment.yml -y
-    IF ERRORLEVEL 1 GOTO end
 
     :: Install the local package in development (experimental) mode
     CALL conda run -p %CONDA_DIR% python -m pip install -e .
-
     GOTO end
 
 :: Initialize SpecKit in the project

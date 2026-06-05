@@ -38,17 +38,13 @@ environments:
       level: DEBUG
 
     data:
-      input: "data/raw/input_data.csv"
-      output: "data/processed/processed.gdb/output_data"
-      log_dir: "reports/logs"
-
-    spatial:
-      default_crs: "EPSG:4326"  # CRS to use when not specified by data source
-      default_unit: "meters"    # Unit for distance calculations (e.g., "meters", "degrees")
+      input: "data/raw"
+      output: "data/processed"
+      log_dir: "data/logs"
 
     esri:
-      gis_url: "https://prof-services.maps.arcgis.com"
-      gis_profile: "ps"
+      gis_url: "https://cklohsstage.esri.com/portal/"
+      gis_profile: "cklohsstage"
 
   # ensure the key exists for each environment so it can be accessed from the Pythion config object
   dev: {}
@@ -64,10 +60,4 @@ environments:
   prod:
 
     logging:
-      level: WARNING
-
-    data:
-      input: "//production/raw/input_data.csv"
-      output: "//production/processed/processed.gdb/output_data"
-      log_dir: "//production/reports/logs"
-    
+      level: WARNING    
