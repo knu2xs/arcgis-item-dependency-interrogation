@@ -1,7 +1,7 @@
 ---
 title: Home
 ---
-# ArcGIS Item Dependency Interrogation 0.2.0.dev0 Documentation
+# ArcGIS Item Dependency Interrogation 0.2.0 Documentation
 
 {% include "../../README.md" %}
 
