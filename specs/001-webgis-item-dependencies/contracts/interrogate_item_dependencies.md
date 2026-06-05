@@ -11,6 +11,7 @@ Python library function exposed from `arcgis_dependency`.
 ```python
 interrogate_item_dependencies(
     item_ids: str | list[str] | None = None,
+  gis: arcgis.gis.GIS | None = None,
     output_excel: str | Path | None = None,
 ) -> pandas.DataFrame | Path
 ```
@@ -19,6 +20,10 @@ interrogate_item_dependencies(
 - `item_ids`:
 - Optional single item ID string or list of item ID strings.
 - If omitted, implementation resolves IDs from config key `request_item_ids`.
+
+- `gis`:
+- Optional pre-built `arcgis.gis.GIS` instance.
+- If provided, implementation uses this object instead of building a GIS from config.
 
 - `output_excel`:
 - Optional workbook output path.
